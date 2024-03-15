@@ -1,10 +1,9 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main>
-      <p>Lista de tarefas</p>
+      <h1>Página principal</h1>
     </main>
   );
 }
