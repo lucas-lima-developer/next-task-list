@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useFormState } from "react-dom";
 
 export default function Home() {
-  // TODO Mostrar mensagens de erro do Next.js
   const [state, formAction] = useFormState(signupUser, null);
 
   return (
@@ -27,8 +26,7 @@ export default function Home() {
               name="confirmarSenha"
             />
           </div>
-          {/* TODO Adicionar esse estilo no module.css da pagina */}
-          <p style={{fontSize: 14, color: 'red', marginTop: -10}}>{state}</p>
+          <p className={styles['login-error-message']}>{state}</p>
           <div className={styles["login-button"]}>
             <button type="submit">Cadastrar</button>
           </div>
