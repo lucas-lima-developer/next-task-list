@@ -1,41 +1,22 @@
 'use server'
 
-import User from "@/models/User"
-import dbConnect from "./dbConnect"
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataSchema } from "./schema";
-import { ZodIssue } from "zod";
-
-// FIXME Modificar essa função para um arquivo com funções de usuário
-async function findUserByEmail(email: any) {
-	await dbConnect();
-
-	const user = await User.findOne({ email }).lean();
-
-	return user;
-}
-
-// FIXME Modificar essa função para um arquivo de função helper e melhorar essa função
-function organizandoErros(array: ZodIssue[]) {
-	let mensagem = '';
-	array.map(error => mensagem += (error.message + ', '));
-	const capitalizedString = mensagem.charAt(0).toUpperCase() + mensagem.slice(1).toLowerCase();
-	return capitalizedString.slice(0, -2);
-}
+import { FormDataSignupSchema } from "./schema";
+import { zodErrorMessageHelper } from "./helper";
+import { createUser, findUserByEmail } from "./userServices";
 
 export async function signupUser(state: any, formData: FormData) {
 
-	const validatedFields = FormDataSchema.safeParse({
+	const validatedFields = FormDataSignupSchema.safeParse({
 		email: formData.get('email'),
 		senha: formData.get('senha'),
 		confirmarSenha: formData.get('confirmarSenha')
 	});
 
-	
 	try {
 		if (!validatedFields.success) {
-			const messageError = organizandoErros(validatedFields.error.errors);
+			const messageError = zodErrorMessageHelper(validatedFields.error.errors);
 			throw new Error(messageError);
 		}
 	
@@ -49,11 +30,9 @@ export async function signupUser(state: any, formData: FormData) {
 
 		const user = await findUserByEmail(email);
 
-		if (user) throw new Error("Esse e-mail já está cadastrado! Informe outro")
+		if (user) throw new Error("Esse e-mail já está cadastrado! Informe outro.")
 
-		await dbConnect();
-
-		const newUser = await User.create({
+		const newUser = await createUser({
 			email,
 			senha: hashedPassword
 		});
