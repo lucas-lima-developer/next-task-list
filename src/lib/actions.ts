@@ -2,9 +2,10 @@
 
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataSignupSchema } from "./schema";
+import { FormDataLoginSchema, FormDataSignupSchema } from "./schema";
 import { zodErrorMessageHelper } from "./helper";
 import { createUser, findUserByEmail } from "./userServices";
+import User, { Users } from "@/models/User";
 
 export async function signupUser(state: any, formData: FormData) {
 
@@ -19,8 +20,8 @@ export async function signupUser(state: any, formData: FormData) {
 			const messageError = zodErrorMessageHelper(validatedFields.error.errors);
 			throw new Error(messageError);
 		}
-	
-		const {email, senha, confirmarSenha} = validatedFields.data;
+
+		const { email, senha, confirmarSenha } = validatedFields.data;
 
 		if (senha !== confirmarSenha) {
 			throw new Error('As senhas devem ser iguais');
@@ -45,4 +46,32 @@ export async function signupUser(state: any, formData: FormData) {
 	redirect('/login');
 }
 
-// TODO Criar Lógica do login, mandando para a '/' quando for autenticado
+export async function loginUser(state: any, formData: FormData) {
+	const validatedFields = FormDataLoginSchema.safeParse({
+		email: formData.get('email'),
+		senha: formData.get('senha'),
+	});
+
+	try {
+		if (!validatedFields.success) {
+			const messageError = zodErrorMessageHelper(validatedFields.error.errors);
+			throw new Error(messageError);
+		}
+
+		const { email, senha } = validatedFields.data;
+
+		const user: any = await findUserByEmail(email);
+
+		if (!user) throw new Error('Nenhum usuário com esse email');
+
+		const isMatch = await bcrypt.compare(senha, user?.senha);
+
+		console.log(isMatch)
+		if (!isMatch) throw new Error("Senha está errada");
+
+	} catch (error: any) {
+		return error.message
+	}
+
+	redirect('/');
+} 
