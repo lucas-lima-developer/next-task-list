@@ -5,7 +5,8 @@ import bcrypt from 'bcryptjs';
 import { FormDataLoginSchema, FormDataSignupSchema } from "./schema";
 import { zodErrorMessageHelper } from "./helper";
 import { createUser, findUserByEmail } from "./userServices";
-import User, { Users } from "@/models/User";
+import { encryptToken } from "./authServices";
+import { cookies } from "next/headers";
 
 export async function signupUser(state: any, formData: FormData) {
 
@@ -66,8 +67,14 @@ export async function loginUser(state: any, formData: FormData) {
 
 		const isMatch = await bcrypt.compare(senha, user?.senha);
 
-		console.log(isMatch)
 		if (!isMatch) throw new Error("Senha está errada");
+
+		const minutes = 5;
+		const expires = new Date(Date.now() + minutes * 60000);
+
+		const token = await encryptToken(user.email, minutes);
+
+		cookies().set("token", token, { expires, httpOnly: true })
 
 	} catch (error: any) {
 		return error.message
