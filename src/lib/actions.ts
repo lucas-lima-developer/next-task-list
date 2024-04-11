@@ -80,5 +80,5 @@ export async function loginUser(state: any, formData: FormData) {
 		return error.message
 	}
 
-	redirect('/');
+	redirect('/dashboard');
 } 
