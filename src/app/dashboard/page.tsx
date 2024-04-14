@@ -16,8 +16,6 @@ export default async function Home() {
 
   const tasks = await getAllTasksFromUser(user);
 
-  console.log(tasks);
-
   return (
     <>
       <div className={styles.container}>

@@ -109,7 +109,5 @@ export async function createTaskAction(state: any, formData: FormData) {
 
 	formData.set("title", '');
 
-	console.log(formData.get("title"));
-
 	revalidatePath('/dashboard');
 }
