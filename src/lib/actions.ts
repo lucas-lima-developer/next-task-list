@@ -2,11 +2,13 @@
 
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataLoginSchema, FormDataSignupSchema } from "./schema";
+import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema } from "./schema";
 import { zodErrorMessageHelper } from "./helper";
 import { createUser, findUserByEmail } from "./userServices";
-import { encryptToken } from "./authServices";
+import { encryptToken, getEmailFromToken } from "./authServices";
 import { cookies } from "next/headers";
+import { createTask } from '@/lib/taskServices';
+import { revalidatePath } from "next/cache";
 
 export async function signupUser(state: any, formData: FormData) {
 
@@ -69,7 +71,7 @@ export async function loginUser(state: any, formData: FormData) {
 
 		if (!isMatch) throw new Error("Senha está errada");
 
-		const minutes = 5;
+		const minutes = 15;
 		const expires = new Date(Date.now() + minutes * 60000);
 
 		const token = await encryptToken(user.email, minutes);
@@ -81,4 +83,33 @@ export async function loginUser(state: any, formData: FormData) {
 	}
 
 	redirect('/dashboard');
-} 
+}
+
+export async function createTaskAction(state: any, formData: FormData) {
+	const validatedFields = FormDataCreateTaskSchema.safeParse({
+		title: formData.get("title")
+	});
+
+	if (!validatedFields.success) {
+		const messageError = zodErrorMessageHelper(validatedFields.error.errors);
+		throw new Error(messageError);
+	}
+
+	const { title } = validatedFields.data;
+
+	const userEmail = await getEmailFromToken()
+
+	if (!userEmail) return redirect('/login');
+
+	const user = await findUserByEmail(userEmail);
+
+	if (!user) return redirect('/login');
+
+	const task = await createTask({ title, user: user._id });
+
+	formData.set("title", '');
+
+	console.log(formData.get("title"));
+
+	revalidatePath('/dashboard');
+}
