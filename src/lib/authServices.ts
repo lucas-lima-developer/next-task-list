@@ -46,7 +46,7 @@ export async function regenerateToken(request: NextRequest) {
 
   if (!email) return null;
 
-  const minutes = 5
+  const minutes = 15
   const newToken = await encryptToken(email, minutes);
 
   const response = NextResponse.next();
