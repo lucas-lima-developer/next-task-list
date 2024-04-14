@@ -10,3 +10,7 @@ export const FormDataLoginSchema = z.object({
   email: z.string().email({ message: 'O email é necessário' }),
   senha: z.string().min(1, { message:  'A senha é necessária' })
 });
+
+export const FormDataCreateTaskSchema = z.object({
+  title: z.string().min(1, { message:  'Nome da tarefa é necessário' })
+})
