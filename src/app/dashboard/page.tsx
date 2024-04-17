@@ -9,12 +9,22 @@ import ListaTarefas from "./ListaTarefas";
 export default async function Home() {
   const email = await getEmailFromToken();
   const user = await findUserByEmail(email);
-  
+
   if (!email || !user) {
     redirect("/login");
   }
 
   const tasks = await getAllTasksFromUser(user);
+
+  const tasksConverted = tasks.map((task) => {
+    return {
+      title: task.title,
+      isComplete: task.isComplete,
+      _id: String(task._id),
+      createdAt: task.createdAt,
+      user: String(task.user),
+    };
+  });
 
   return (
     <>
@@ -24,7 +34,7 @@ export default async function Home() {
         </header>
         <main className={styles.main}>
           <FormCriarTarefa />
-          <ListaTarefas tasks={tasks}/>
+          <ListaTarefas tasks={tasksConverted} />
         </main>
       </div>
     </>
