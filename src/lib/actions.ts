@@ -7,7 +7,7 @@ import { zodErrorMessageHelper } from "./helper";
 import { createUser, findUserByEmail } from "./userServices";
 import { encryptToken, getEmailFromToken } from "./authServices";
 import { cookies } from "next/headers";
-import { createTask } from '@/lib/taskServices';
+import { createTask, deleteTaskById } from '@/lib/taskServices';
 import { revalidatePath } from "next/cache";
 
 export async function signupUser(state: any, formData: FormData) {
@@ -107,7 +107,11 @@ export async function createTaskAction(state: any, formData: FormData) {
 
 	const task = await createTask({ title, user: user._id });
 
-	formData.set("title", '');
-
 	revalidatePath('/dashboard');
 }
+
+export async function deleteTaskAction(id: string) {
+	const deletedTask = await deleteTaskById(id);
+
+	revalidatePath('/dashboard');
+} 
