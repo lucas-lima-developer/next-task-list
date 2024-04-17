@@ -13,6 +13,22 @@ export async function createTask(task: { title:string, user: Schema.Types.Object
   return taskCreate;
 }
 
+export async function getTaskWithId(id: string) {
+  await dbConnect();
+
+  const task = await Task.findById(id);
+
+  return task;
+}
+
+export async function deleteTaskById(id: string) {
+  await dbConnect();
+
+  const taskDeleted = await Task.findByIdAndDelete(id);
+
+  return taskDeleted;
+}
+
 export async function getAllTasksFromUser(user: UserDocument) : Promise<TaskArray> {
   await dbConnect();
 
