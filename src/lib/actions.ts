@@ -7,7 +7,7 @@ import { zodErrorMessageHelper } from "./helper";
 import { createUser, findUserByEmail } from "./userServices";
 import { encryptToken, getEmailFromToken } from "./authServices";
 import { cookies } from "next/headers";
-import { createTask, deleteTaskById } from '@/lib/taskServices';
+import { completeTaskById, createTask, deleteTaskById, getTaskWithId } from '@/lib/taskServices';
 import { revalidatePath } from "next/cache";
 
 export async function signupUser(state: any, formData: FormData) {
@@ -115,3 +115,30 @@ export async function deleteTaskAction(id: string) {
 
 	revalidatePath('/dashboard');
 } 
+
+export async function changeCompleteStatusTask(id: string) {
+	await completeTaskById(id);
+}
+
+export async function updateTaskAction(id: string, formData: FormData,) {
+	const validatedFields = FormDataCreateTaskSchema.safeParse({
+		title: formData.get("title")
+	});
+
+	if (!validatedFields.success) {
+		const messageError = zodErrorMessageHelper(validatedFields.error.errors);
+		throw new Error(messageError);
+	}
+
+	const { title } = validatedFields.data;
+
+	console.log(title, id);
+
+	const task = await getTaskWithId(id);
+
+	task.title = title;
+	await task.save();
+
+	revalidatePath('/dashboard');
+	redirect('/dashboard');
+}
