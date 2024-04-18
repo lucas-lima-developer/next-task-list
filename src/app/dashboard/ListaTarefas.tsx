@@ -2,6 +2,8 @@
 
 import { deleteTaskAction } from "@/lib/actions";
 import styles from "./page.module.css";
+import { completeTaskById } from "@/lib/taskServices";
+import Link from "next/link";
 
 export type TaskProps = {
   title: string;
@@ -28,12 +30,27 @@ export default function ListaTarefas({ tasks }: Props) {
 function TaskComponent({ task }: { task: TaskProps }) {
   const deleteTaskWithId = deleteTaskAction.bind(null, task._id);
 
+  const taskClass = task.isComplete
+    ? `${styles["task-item"]} ${styles.completed}`
+    : `${styles["task-item"]}`;
+
   return (
-    <li className={styles["task-item"]}>
-      <span>{task.title}</span>
-      <form action={deleteTaskWithId}>
-        <button className={styles["task-button"]}>X</button>
-      </form>
+    <li className={taskClass}>
+      <div
+        onClick={async () => {
+          await completeTaskById(task._id);
+        }}
+      >
+        <span>{task.title}</span>
+      </div>
+      <div>
+        <button className={styles["edit-button"]}>
+          <Link href={`/dashboard/${task._id}/edit`}>Atualizar</Link>
+        </button>
+        <form action={deleteTaskWithId}>
+          <button className={styles["task-button"]}>X</button>
+        </form>
+      </div>
     </li>
   );
 }
