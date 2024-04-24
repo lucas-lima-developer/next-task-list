@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteTaskAction } from "@/lib/actions";
-import styles from "./page.module.css";
+import styles from "@/app/dashboard/page.module.css";
 import { completeTaskById } from "@/lib/taskServices";
 import Link from "next/link";
 

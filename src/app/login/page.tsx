@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import styles from "./page.module.css";
+import styles from "@/app/login/page.module.css";
 import { useFormState } from "react-dom";
 import { loginUser } from "@/lib/actions";
 

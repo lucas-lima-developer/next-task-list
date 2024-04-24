@@ -1,7 +1,7 @@
 "use client";
 
 import { signupUser } from "@/lib/actions";
-import styles from "./page.module.css";
+import styles from "@/app/signup/page.module.css";
 import Link from "next/link"; 
 import { useFormState } from "react-dom";
 

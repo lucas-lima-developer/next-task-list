@@ -2,10 +2,10 @@
 
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema } from "./schema";
-import { zodErrorMessageHelper } from "./helper";
-import { createUser, findUserByEmail } from "./userServices";
-import { encryptToken, getEmailFromToken } from "./authServices";
+import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema } from "@/lib/schema";
+import { zodErrorMessageHelper } from "@/lib/helper";
+import { createUser, findUserByEmail } from "@/lib/userServices";
+import { encryptToken, getEmailFromToken } from "@/lib/authServices";
 import { cookies } from "next/headers";
 import { completeTaskById, createTask, deleteTaskById, getTaskWithId } from '@/lib/taskServices';
 import { revalidatePath } from "next/cache";
@@ -114,7 +114,7 @@ export async function deleteTaskAction(id: string) {
 	const deletedTask = await deleteTaskById(id);
 
 	revalidatePath('/dashboard');
-} 
+}
 
 export async function changeCompleteStatusTask(id: string) {
 	await completeTaskById(id);

@@ -1,9 +1,9 @@
 'use server'
 
-import dbConnect from "./dbConnect";
-import Task, { TaskArray } from '../models/Task'
+import dbConnect from "@/lib/dbConnect";
+import Task, { TaskArray } from '@/models/Task'
 import { Schema } from "mongoose";
-import { UserDocument } from "./userServices";
+import { UserDocument } from "@/lib/userServices";
 import { revalidatePath } from "next/cache";
 
 export async function createTask(task: { title:string, user: Schema.Types.ObjectId }) {

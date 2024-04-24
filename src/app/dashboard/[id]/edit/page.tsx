@@ -1,7 +1,7 @@
 import { updateTaskAction } from "@/lib/actions";
 import { getTaskWithId } from "@/lib/taskServices";
 import { redirect } from "next/navigation";
-import styles from "../../page.module.css";
+import styles from "@/app/dashboard/page.module.css";
 import Link from "next/link";
 
 export default async function Home({ params }: { params: { id: string } }) {

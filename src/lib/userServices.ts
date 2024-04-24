@@ -1,5 +1,5 @@
 import User from "@/models/User";
-import dbConnect from "./dbConnect";
+import dbConnect from "@/lib/dbConnect";
 import { Schema } from "mongoose";
 
 export interface UserDocument{

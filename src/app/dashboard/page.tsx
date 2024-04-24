@@ -1,10 +1,10 @@
 import { getEmailFromToken } from "@/lib/authServices";
 import { redirect } from "next/navigation";
-import styles from "./page.module.css";
+import styles from "@/app/dashboard/page.module.css";
 import FormCriarTarefa from "./FormCriarTarefa";
 import { findUserByEmail } from "@/lib/userServices";
 import { getAllTasksFromUser } from "@/lib/taskServices";
-import ListaTarefas from "./ListaTarefas";
+import ListaTarefas from "@/app/dashboard/ListaTarefas";
 
 export default async function Home() {
   const email = await getEmailFromToken();
