@@ -5,10 +5,10 @@ import bcrypt from 'bcryptjs';
 import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema } from "@/lib/schema";
 import { zodErrorMessageHelper } from "@/lib/helper";
 import { createUser, findUserByEmail } from "@/lib/userServices";
-import { encryptToken, getEmailFromToken } from "@/lib/authServices";
 import { cookies } from "next/headers";
 import { completeTaskById, createTask, deleteTaskById, getTaskWithId } from '@/lib/taskServices';
 import { revalidatePath } from "next/cache";
+import AuthService from "@/lib/services/AuthService";
 
 export async function signupUser(state: any, formData: FormData) {
 
@@ -74,7 +74,7 @@ export async function loginUser(state: any, formData: FormData) {
 		const minutes = 15;
 		const expires = new Date(Date.now() + minutes * 60000);
 
-		const token = await encryptToken(user.email, minutes);
+		const token = await AuthService.encryptToken(user.email);
 
 		cookies().set("token", token, { expires, httpOnly: true })
 
@@ -97,7 +97,7 @@ export async function createTaskAction(state: any, formData: FormData) {
 
 	const { title } = validatedFields.data;
 
-	const userEmail = await getEmailFromToken()
+	const userEmail = await AuthService.getEmailFromToken();
 
 	if (!userEmail) return redirect('/login');
 
