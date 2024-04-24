@@ -1,6 +1,14 @@
-import { regenerateToken } from "@/lib/authServices";
 import { NextRequest } from "next/server";
+import MiddlewareHelper from "@/middleware/MiddlewareHelper";
 
 export async function middleware(request: NextRequest) {
-  return await regenerateToken(request);
+  const middlewareHelper = new MiddlewareHelper(request);
+
+  await middlewareHelper.regenerateToken();
+
+  return middlewareHelper.getResponse();
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*']
 }
