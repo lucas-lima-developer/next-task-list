@@ -132,8 +132,6 @@ export async function updateTaskAction(id: string, formData: FormData,) {
 
 	const { title } = validatedFields.data;
 
-	console.log(title, id);
-
 	const task = await getTaskWithId(id);
 
 	task.title = title;
