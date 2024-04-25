@@ -8,10 +8,14 @@ export interface UserDocument{
   senha: string;
 }
 
-export async function findUserByEmail(email: any) : Promise<UserDocument | null> {
+export async function findUserByEmail(email: any) : Promise<UserDocument> {
 	await dbConnect();
 
 	const user = await User.findOne({ email }).lean();
+
+  if (!user) {
+    throw new Error("Usuário não encontrado")
+  }
 
 	return user as UserDocument;
 }
