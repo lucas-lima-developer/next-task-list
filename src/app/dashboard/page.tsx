@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import styles from "@/app/dashboard/page.module.css";
 import FormCriarTarefa from "./FormCriarTarefa";
 import { findUserByEmail } from "@/lib/userServices";
@@ -10,9 +9,6 @@ export default async function Home() {
   const email = await AuthService.getEmailFromToken();
   const user = await findUserByEmail(email);
 
-  if (!email || !user) {
-    redirect("/login");
-  }
 
   const tasks = await getAllTasksFromUser(user);
 

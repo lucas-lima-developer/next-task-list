@@ -1,9 +1,11 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import MiddlewareHelper from "@/middleware/MiddlewareHelper";
+import AuthService from "@/lib/services/AuthService";
 
 export async function middleware(request: NextRequest) {
-  const middlewareHelper = new MiddlewareHelper(request);
+  if (!AuthService.isAuthenticated()) return NextResponse.redirect(new URL('/login', request.url));
 
+  const middlewareHelper = new MiddlewareHelper();
   await middlewareHelper.regenerateToken();
 
   return middlewareHelper.getResponse();
@@ -11,4 +13,4 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ['/dashboard/:path*']
-}
+} 

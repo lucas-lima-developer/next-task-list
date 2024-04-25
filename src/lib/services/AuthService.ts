@@ -10,6 +10,10 @@ export default class AuthService {
   private static readonly Alg = 'HS256';
   static readonly ExpirationTokenTime = 15;
 
+  /*
+    FIXME Rever se pode em vez de retornar null, lançar um erro para uma 
+    página de erro.
+  */
   static async getEmailFromToken(): Promise<string | null> {
     const token = cookies().get('token')?.value;
 
@@ -22,14 +26,16 @@ export default class AuthService {
     return null;
   }
 
-  static async encryptToken(email : string) {
+  // TODO Criar função que retorna o usuário atual
+
+  static async encryptToken(email: string) {
     const token = await new jose.SignJWT({ email })
       .setProtectedHeader({ alg: AuthService.Alg })
       .setIssuedAt()
       .setExpirationTime(`${AuthService.ExpirationTokenTime}m`)
       .sign(AuthService.Key);
 
-      return token;
+    return token;
   }
 
   static async decryptToken(token: string): Promise<DecodedToken> {
@@ -38,5 +44,11 @@ export default class AuthService {
     });
 
     return payload as DecodedToken;
+  }
+
+  static isAuthenticated(): boolean {
+    const token = cookies().get('token')?.value;
+
+    return typeof token === 'string' && token.trim() !== '';
   }
 }
