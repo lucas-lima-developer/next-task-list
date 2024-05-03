@@ -1,8 +1,7 @@
 "use client";
 
-import { deleteTaskAction } from "@/lib/actions";
+import { deleteTaskAction, updateIsCompleteAction } from "@/lib/actions";
 import styles from "@/app/dashboard/page.module.css";
-import { completeTaskById } from "@/lib/taskServices";
 import Link from "next/link";
 
 export type TaskProps = {
@@ -38,7 +37,7 @@ function TaskComponent({ task }: { task: TaskProps }) {
     <li className={taskClass}>
       <div
         onClick={async () => {
-          await completeTaskById(task._id);
+          await updateIsCompleteAction(task._id, !task.isComplete);
         }}
       >
         <span>{task.title}</span>
