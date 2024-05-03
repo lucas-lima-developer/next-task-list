@@ -3,12 +3,12 @@
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
 import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema } from "@/lib/schema";
-import { zodErrorMessageHelper } from "@/lib/helper";
-import { createUser, findUserByEmail } from "@/lib/userServices";
 import { cookies } from "next/headers";
-import { completeTaskById, createTask, deleteTaskById, getTaskWithId } from '@/lib/taskServices';
 import { revalidatePath } from "next/cache";
 import AuthService from "@/lib/services/AuthService";
+import TaskService from "@/lib/services/TaskService";
+import UserService from "@/lib/services/UserService";
+import HelperService from "@/lib/services/HelperService";
 
 export async function signupUser(state: any, formData: FormData) {
 
@@ -20,7 +20,7 @@ export async function signupUser(state: any, formData: FormData) {
 
 	try {
 		if (!validatedFields.success) {
-			const messageError = zodErrorMessageHelper(validatedFields.error.errors);
+			const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
 			throw new Error(messageError);
 		}
 
@@ -32,11 +32,11 @@ export async function signupUser(state: any, formData: FormData) {
 
 		const hashedPassword = await bcrypt.hash(senha, 10);
 
-		const user = await findUserByEmail(email);
+		const user = await UserService.findByEmail(email);
 
 		if (user) throw new Error("Esse e-mail já está cadastrado! Informe outro.")
 
-		const newUser = await createUser({
+		const newUser = await UserService.create({
 			email,
 			senha: hashedPassword
 		});
@@ -57,13 +57,13 @@ export async function loginUser(state: any, formData: FormData) {
 
 	try {
 		if (!validatedFields.success) {
-			const messageError = zodErrorMessageHelper(validatedFields.error.errors);
+			const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
 			throw new Error(messageError);
 		}
 
 		const { email, senha } = validatedFields.data;
 
-		const user: any = await findUserByEmail(email);
+		const user: any = await UserService.findByEmail(email);
 
 		if (!user) throw new Error('Nenhum usuário com esse email');
 
@@ -91,7 +91,7 @@ export async function createTaskAction(state: any, formData: FormData) {
 	});
 
 	if (!validatedFields.success) {
-		const messageError = zodErrorMessageHelper(validatedFields.error.errors);
+		const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
 		throw new Error(messageError);
 	}
 
@@ -101,42 +101,41 @@ export async function createTaskAction(state: any, formData: FormData) {
 
 	if (!userEmail) return redirect('/login');
 
-	const user = await findUserByEmail(userEmail);
+	const user = await UserService.findByEmail(userEmail);
 
 	if (!user) return redirect('/login');
 
-	const task = await createTask({ title, user: user._id });
+	const task = await TaskService.create({ title, user: user._id });
 
 	revalidatePath('/dashboard');
 }
 
 export async function deleteTaskAction(id: string) {
-	const deletedTask = await deleteTaskById(id);
+	await TaskService.delete(id);
 
 	revalidatePath('/dashboard');
 }
 
-export async function changeCompleteStatusTask(id: string) {
-	await completeTaskById(id);
+export async function updateTaskAction(id: string, formData: FormData) {
+  const validatedFields = FormDataCreateTaskSchema.safeParse({
+    title: formData.get("title")
+  });
+
+  if (!validatedFields.success) {
+    const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
+    throw new Error(messageError);
+  }
+
+  const { title } = validatedFields.data;
+
+  await TaskService.updateTitle(id, title);
+
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
 }
 
-export async function updateTaskAction(id: string, formData: FormData,) {
-	const validatedFields = FormDataCreateTaskSchema.safeParse({
-		title: formData.get("title")
-	});
+export async function updateIsCompleteAction(id: string, isComplete: boolean) {
+	await TaskService.updateIsCompleted(id, isComplete);
 
-	if (!validatedFields.success) {
-		const messageError = zodErrorMessageHelper(validatedFields.error.errors);
-		throw new Error(messageError);
-	}
-
-	const { title } = validatedFields.data;
-
-	const task = await getTaskWithId(id);
-
-	task.title = title;
-	await task.save();
-
-	revalidatePath('/dashboard');
-	redirect('/dashboard');
+	revalidatePath('dashboard');
 }
