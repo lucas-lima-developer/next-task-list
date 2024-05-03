@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import MiddlewareHelper from "@/middleware/MiddlewareHelper";
+import MiddlewareHelper from "@/lib/middleware/MiddlewareHelper";
 import AuthService from "@/lib/services/AuthService";
 
 export async function middleware(request: NextRequest) {
