@@ -111,7 +111,7 @@ export async function createTaskAction(state: any, formData: FormData) {
 
 	if (!user) return redirect('/login');
 
-	const task = await TaskService.create({ title, user: user._id });
+	const task = await TaskService.create({ title, userId: user._id });
 
 	revalidatePath('/dashboard');
 }

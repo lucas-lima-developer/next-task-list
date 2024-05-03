@@ -1,9 +1,10 @@
-import Task, { Task as TaskInterface } from "@/lib/models/Task";
 import { Schema } from "mongoose";
 import DatabaseService from "@/lib/services/DatabaseService";
+import Task from "@/lib/models/Task";
+import TaskInterface from "@/lib/interfaces/Task";
 
 export default class TaskService {
-  static async create(task: { title: string, user: Schema.Types.ObjectId }): Promise<TaskInterface> {
+  static async create(task: { title: string, userId: Schema.Types.ObjectId }): Promise<TaskInterface> {
     await DatabaseService.connect();
 
     const taskCreated = await Task.create(task);
@@ -35,7 +36,7 @@ export default class TaskService {
   }
 
   static async getAll(userId: string): Promise<TaskInterface[]> {
-    const tasks = await Task.find({ user: userId });
+    const tasks = await Task.find({ userId });
 
     return tasks;
   }

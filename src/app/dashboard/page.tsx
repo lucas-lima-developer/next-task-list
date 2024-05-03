@@ -20,7 +20,7 @@ export default async function Home() {
       isComplete: task.isComplete,
       _id: String(task._id),
       createdAt: task.createdAt,
-      user: String(task.user),
+      user: String(task.userId),
     };
   });
 
