@@ -4,11 +4,13 @@ import ListaTarefas from "@/app/dashboard/ListaTarefas";
 import AuthService from "@/lib/services/AuthService";
 import TaskService from "@/lib/services/TaskService";
 import UserService from "@/lib/services/UserService";
+import LinkHeader from "./LinkHeader";
 
 export default async function Home() {
   const email = await AuthService.getEmailFromToken();
-  const user = JSON.parse(JSON.stringify(await UserService.findByEmail(email!)));
-
+  const user = JSON.parse(
+    JSON.stringify(await UserService.findByEmail(email!))
+  );
 
   const tasks = await TaskService.getAll(user._id);
 
@@ -27,6 +29,7 @@ export default async function Home() {
       <div className={styles.container}>
         <header className={styles.header}>
           <h1>Dashboard</h1>
+          <LinkHeader />
         </header>
         <main className={styles.main}>
           <FormCriarTarefa />
