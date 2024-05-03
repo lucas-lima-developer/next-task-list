@@ -85,6 +85,12 @@ export async function loginUser(state: any, formData: FormData) {
 	redirect('/dashboard');
 }
 
+export async function logoutUserAction() {
+	AuthService.removeTokenFromCookies();
+
+	redirect('/login');
+}
+
 export async function createTaskAction(state: any, formData: FormData) {
 	const validatedFields = FormDataCreateTaskSchema.safeParse({
 		title: formData.get("title")

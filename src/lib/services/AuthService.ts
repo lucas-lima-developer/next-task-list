@@ -51,4 +51,8 @@ export default class AuthService {
 
     return typeof token === 'string' && token.trim() !== '';
   }
+
+  static removeTokenFromCookies() {
+    cookies().delete('token')
+  }
 }
