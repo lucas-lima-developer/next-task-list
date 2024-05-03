@@ -1,16 +1,16 @@
 import styles from "@/app/dashboard/page.module.css";
 import FormCriarTarefa from "./FormCriarTarefa";
-import { findUserByEmail } from "@/lib/userServices";
-import { getAllTasksFromUser } from "@/lib/taskServices";
 import ListaTarefas from "@/app/dashboard/ListaTarefas";
 import AuthService from "@/lib/services/AuthService";
+import TaskService from "@/lib/services/TaskService";
+import UserService from "@/lib/services/UserService";
 
 export default async function Home() {
   const email = await AuthService.getEmailFromToken();
-  const user = await findUserByEmail(email);
+  const user = JSON.parse(JSON.stringify(await UserService.findByEmail(email!)));
 
 
-  const tasks = await getAllTasksFromUser(user);
+  const tasks = await TaskService.getAll(user._id);
 
   const tasksConverted = tasks.map((task) => {
     return {

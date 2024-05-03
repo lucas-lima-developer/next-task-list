@@ -1,16 +1,17 @@
 import { updateTaskAction } from "@/lib/actions";
-import { getTaskWithId } from "@/lib/taskServices";
 import { redirect } from "next/navigation";
 import styles from "@/app/dashboard/page.module.css";
 import Link from "next/link";
+import TaskService from "@/lib/services/TaskService";
 
 export default async function Home({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  const task = await getTaskWithId(id);
+  const task = JSON.parse(JSON.stringify(await TaskService.get(id)))
   const title = task.title;
 
-  const updateTaskWithId = updateTaskAction.bind(null, id);
+  const updateTaskWithId = updateTaskAction.bind(null, task);
+  
 
   if (!task) redirect("/dashboard");
 
