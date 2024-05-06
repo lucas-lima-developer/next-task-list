@@ -8,10 +8,24 @@ if (!MONGODB_URI) {
   );
 }
 
+/**
+ * Classe responsável por realizar serviços de conexão com banco de dados mongodb.
+ *
+ * @export
+ * @class DatabaseService
+ */
 export default class DatabaseService {
+  
   private static mongooseInstance: Mongoose | null = null;
   private static mongooseConnection: mongoose.Connection | null = null;
-
+ 
+  /**
+   * Função responsável por fazer a conexão do banco de dados.
+   *
+   * @static
+   * @return {Promise<mongoose.Connection>} - conexão com o banco de dados.
+   * @memberof DatabaseService
+   */
   public static async connect(): Promise<mongoose.Connection> {
     if (DatabaseService.mongooseConnection) {
       return DatabaseService.mongooseConnection;

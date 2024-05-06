@@ -1,10 +1,22 @@
 import AuthService from "@/lib/services/AuthService";
 import { NextResponse } from "next/server";
 
+/**
+ * Classe responsável por ajudar a middleware.
+ *
+ * @export
+ * @class MiddlewareHelper
+ */
 export default class MiddlewareHelper {
   private response : NextResponse = NextResponse.next();
 
-  async regenerateToken() :  Promise<void | NextResponse> {
+  /**
+   * Renova o token de autenticação de usuário.
+   *
+   * @return {(Promise<void>)} - atualiza o atributo privado response.
+   * @memberof MiddlewareHelper
+   */
+  async regenerateToken() :  Promise<void> {
     const email = await AuthService.getEmailFromToken();
 
     if (email) {
@@ -19,6 +31,12 @@ export default class MiddlewareHelper {
     }
   }
 
+  /**
+   * Retorna a response.
+   *
+   * @return {NextResponse} - response.
+   * @memberof MiddlewareHelper
+   */
   getResponse() : NextResponse {
     return this.response;
   }
