@@ -12,17 +12,7 @@ export default async function Home() {
     JSON.stringify(await UserService.findByEmail(email!))
   );
 
-  const tasks = await TaskService.getAll(user._id);
-
-  const tasksConverted = tasks.map((task) => {
-    return {
-      title: task.title,
-      isComplete: task.isComplete,
-      _id: String(task._id),
-      createdAt: task.createdAt,
-      user: String(task.userId),
-    };
-  });
+  const tasks = JSON.parse(JSON.stringify(await TaskService.getAll(user._id)));
 
   return (
     <>
@@ -33,7 +23,7 @@ export default async function Home() {
         </header>
         <main className={styles.main}>
           <FormCriarTarefa />
-          <ListaTarefas tasks={tasksConverted} />
+          <ListaTarefas tasks={tasks} />
         </main>
       </div>
     </>
