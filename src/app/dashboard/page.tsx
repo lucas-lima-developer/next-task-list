@@ -5,6 +5,7 @@ import AuthService from "@/lib/services/AuthService";
 import TaskService from "@/lib/services/TaskService";
 import UserService from "@/lib/services/UserService";
 import LinkHeader from "./LinkHeader";
+import HeaderLinks from "@/components/header/HeaderLinks";
 
 export default async function Home() {
   const email = await AuthService.getEmailFromToken();
@@ -17,10 +18,7 @@ export default async function Home() {
   return (
     <>
       <div className={styles.container}>
-        <header className={styles.header}>
-          <h1>Dashboard</h1>
-          <LinkHeader />
-        </header>
+        <HeaderLinks />
         <main className={styles.main}>
           <FormCriarTarefa />
           <ListaTarefas tasks={tasks} />
