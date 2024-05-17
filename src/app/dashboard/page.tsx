@@ -4,7 +4,6 @@ import ListaTarefas from "@/app/dashboard/ListaTarefas";
 import AuthService from "@/lib/services/AuthService";
 import TaskService from "@/lib/services/TaskService";
 import UserService from "@/lib/services/UserService";
-import LinkHeader from "./LinkHeader";
 import HeaderLinks from "@/components/header/HeaderLinks";
 
 export default async function Home() {
@@ -17,13 +16,11 @@ export default async function Home() {
 
   return (
     <>
-      <div className={styles.container}>
-        <HeaderLinks />
-        <main className={styles.main}>
-          <FormCriarTarefa />
-          <ListaTarefas tasks={tasks} />
-        </main>
-      </div>
+      <HeaderLinks />
+      <main className={styles.main}>
+        <FormCriarTarefa />
+        <ListaTarefas tasks={tasks} />
+      </main>
     </>
   );
 }
