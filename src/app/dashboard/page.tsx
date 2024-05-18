@@ -1,10 +1,10 @@
 import styles from "@/app/dashboard/page.module.css";
-import FormCriarTarefa from "./FormCriarTarefa";
 import ListaTarefas from "@/app/dashboard/ListaTarefas";
 import AuthService from "@/lib/services/AuthService";
 import TaskService from "@/lib/services/TaskService";
 import UserService from "@/lib/services/UserService";
 import HeaderLinks from "@/components/header/HeaderLinks";
+import FormCreateTask from "@/components/dashboard/FormCreateTask";
 
 export default async function Home() {
   const email = await AuthService.getEmailFromToken();
@@ -17,8 +17,8 @@ export default async function Home() {
   return (
     <>
       <HeaderLinks />
-      <main className={styles.main}>
-        <FormCriarTarefa />
+      <main>
+        <FormCreateTask />
         <ListaTarefas tasks={tasks} />
       </main>
     </>
