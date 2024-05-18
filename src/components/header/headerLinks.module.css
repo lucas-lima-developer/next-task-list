@@ -40,7 +40,7 @@
   color: #d3d0d0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 680px) {
   .navbar {
     height: unset;
   }
