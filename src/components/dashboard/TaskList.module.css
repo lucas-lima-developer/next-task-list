@@ -1,0 +1,64 @@
+.list {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+.list ul {
+  width: 80%;
+  list-style: none;
+}
+
+.task {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin: 10px 0;
+  padding: 10px;
+  word-wrap: break-word;
+}
+
+.title {
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.outline {
+  text-decoration: line-through;
+  color: #495464;
+}
+
+.bottomHelper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  border: none;
+  background-color: unset;
+  font-size: 1em;
+  color: #495464;
+  cursor: pointer;
+}
+
+.button a {
+  color: unset;
+}
+
+.updateButton:hover {
+  color: #000000;
+}
+
+.deleteButton:hover {
+  color: #f11d1d;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: #495464
+}
