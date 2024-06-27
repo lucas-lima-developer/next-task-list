@@ -1,5 +1,5 @@
 .main {
-  background-color: grey;
+  background-color: #495464;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +58,8 @@
 }
 
 .buttonBox button:hover {
-  background-color: rgb(208, 216, 208);
+  background-color: #495464;
+  color: #F4F4F2;
   cursor: pointer;
 }
 
