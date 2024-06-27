@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema } from "@/lib/schema";
+import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema, FormDataUpdateTaskSchema } from "@/lib/schema";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import AuthService from "@/lib/services/AuthService";
@@ -123,7 +123,7 @@ export async function deleteTaskAction(id: string) {
 }
 
 export async function updateTaskAction(state: any, formData: FormData) {
-	const validatedFields = FormDataCreateTaskSchema.safeParse({
+	const validatedFields = FormDataUpdateTaskSchema.safeParse({
 		title: formData.get("title"),
 		taskId: formData.get("taskId")
 	});
