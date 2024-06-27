@@ -12,5 +12,6 @@ export const FormDataLoginSchema = z.object({
 });
 
 export const FormDataCreateTaskSchema = z.object({
-  title: z.string().min(1, { message:  'Nome da tarefa é necessário' })
+  title: z.string().min(1, { message:  'Nome da tarefa é necessário' }),
+  taskId: z.string().min(1, { message:  'Id da tarefa é necessário' })
 })
