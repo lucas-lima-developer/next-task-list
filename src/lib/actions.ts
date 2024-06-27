@@ -122,22 +122,23 @@ export async function deleteTaskAction(id: string) {
 	revalidatePath('/dashboard');
 }
 
-export async function updateTaskAction(id: string, formData: FormData) {
-  const validatedFields = FormDataCreateTaskSchema.safeParse({
-    title: formData.get("title")
-  });
+export async function updateTaskAction(state: any, formData: FormData) {
+	const validatedFields = FormDataCreateTaskSchema.safeParse({
+		title: formData.get("title"),
+		taskId: formData.get("taskId")
+	});
 
-  if (!validatedFields.success) {
-    const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
-    throw new Error(messageError);
-  }
+	if (!validatedFields.success) {
+		const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
+		throw new Error(messageError);
+	}
 
-  const { title } = validatedFields.data;
+	const { taskId, title } = validatedFields.data;
 
-  await TaskService.updateTitle(id, title);
+	await TaskService.updateTitle(taskId, title);
 
-  revalidatePath('/dashboard');
-  redirect('/dashboard');
+	revalidatePath('/dashboard');
+	redirect('/dashboard');
 }
 
 export async function updateIsCompleteAction(id: string, isComplete: boolean) {
