@@ -1,8 +1,17 @@
+import AuthService from "@/lib/services/AuthService";
+import { redirect } from "next/navigation";
+
 export default function Home() {
+
+  if (AuthService.isAuthenticated()) {
+    redirect("/dashboard");
+  } else {
+    redirect("/login");
+  }
+
   return (
     <main>
-      {/* TODO fazer a página explicando como funciona o projeto */}
-      <h1>Página explicando o projeto</h1>
+      <h1>/login para página de login</h1>
     </main>
   );
 }
