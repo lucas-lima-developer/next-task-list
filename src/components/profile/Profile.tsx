@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import styles from "@/components/profile/Profile.module.css";
+import { deleteUserAction } from "@/lib/actions";
 
 interface ProfileProps {
   email: string;
@@ -39,7 +40,9 @@ export default function Profile({
         <Link href={`profile/senha`}>
           <button>Mudar senha</button>
         </Link>
-        <button>Apagar conta</button>
+        <button onClick={async () => {
+          await deleteUserAction(email)
+        }}>Apagar conta</button>
       </div>
     </div>
   );

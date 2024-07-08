@@ -109,4 +109,8 @@ export default class TaskService {
     task.isComplete = isComplete;
     await task.save();
   }
+
+  static async deleteAllUsersTasks(userId: string) {
+    await Task.deleteMany({ userId });
+  }
 }

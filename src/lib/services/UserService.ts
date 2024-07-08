@@ -3,6 +3,7 @@ import UserInterface from "@/lib/interfaces/User";
 import DatabaseService from "@/lib/services/DatabaseService";
 import bcrypt from 'bcryptjs';
 import AuthService from "@/lib/services/AuthService";
+import TaskService from "@/lib/services/TaskService";
 
 /**
  * Classe responsável pelos serviços de usuário.
@@ -76,5 +77,15 @@ export default class UserService {
 
     user.senha = hashedPassword;
     await user.save();
+  }
+
+  static async deleteUser(email: string) {
+    await DatabaseService.connect();
+
+    const user = await UserService.findByEmail(email);
+
+    await TaskService.deleteAllUsersTasks(user._id.toString())
+
+    await user.deleteOne();
   }
 }

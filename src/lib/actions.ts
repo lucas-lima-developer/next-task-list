@@ -206,3 +206,9 @@ export async function updateUserPasswordAction(state: any, formData: FormData) {
 	revalidatePath('/profile');
 	redirect('/profile');
 }
+
+export async function deleteUserAction(email: string) {
+	await UserService.deleteUser(email);
+
+	redirect('/login');
+}
