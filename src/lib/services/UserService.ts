@@ -26,10 +26,6 @@ export default class UserService {
 
     const user = await User.findOne({ email });
 
-    if (!user) {
-      throw new Error(`Usuário com email ${email} não encontrado`);
-    }
-
     return user;
   }
 
