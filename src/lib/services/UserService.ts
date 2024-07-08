@@ -1,6 +1,7 @@
 import User from "@/lib/models/User";
 import UserInterface from "@/lib/interfaces/User";
 import DatabaseService from "@/lib/services/DatabaseService";
+import bcrypt from 'bcryptjs';
 import AuthService from "@/lib/services/AuthService";
 
 /**
@@ -59,6 +60,21 @@ export default class UserService {
     const user = await UserService.findByEmail(email);
 
     user.email = newEmail;
+    await user.save();
+  }
+
+  static async updateUserPassword(email: string, newPassword: string, oldPassword: string) {
+    await DatabaseService.connect();
+
+    const user = await UserService.findByEmail(email);
+
+    const isMatch = await bcrypt.compare(oldPassword, user?.senha);
+
+		if (!isMatch) throw new Error("Senha está errada");
+    
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.senha = hashedPassword;
     await user.save();
   }
 }

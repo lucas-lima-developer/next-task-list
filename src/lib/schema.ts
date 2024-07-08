@@ -26,3 +26,9 @@ export const FormDataUpdateUserEmail = z.object({
   email: z.string().email(),
   oldEmail: z.string().email()
 });
+
+export const FormDataUpdatePassword = z.object({
+  oldPassword: z.string(),
+  email: z.string().email(),
+  newPassword: z.string()
+});

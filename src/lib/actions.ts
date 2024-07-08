@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema, FormDataUpdateTaskSchema, FormDataUpdateUserEmail } from "@/lib/schema";
+import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema, FormDataUpdatePassword, FormDataUpdateTaskSchema, FormDataUpdateUserEmail } from "@/lib/schema";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import AuthService from "@/lib/services/AuthService";
@@ -174,6 +174,32 @@ export async function updateUserEmailAction(state: any, formData: FormData) {
 
 		cookies().set("token", token, { expires, httpOnly: true })
 	} catch (error: any) {
+		return error.message;
+	}
+
+	revalidatePath('/profile');
+	redirect('/profile');
+}
+
+export async function updateUserPasswordAction(state: any, formData: FormData) {
+	const validatedFields = FormDataUpdatePassword.safeParse({
+		email: formData.get("email"),
+		newPassword: formData.get("newPassword"),
+		oldPassword: formData.get("oldPassword")
+	});
+
+	try {
+
+		if (!validatedFields.success) {
+			const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
+			throw new Error(messageError);
+		}
+
+		const { email, newPassword, oldPassword } = validatedFields.data;
+
+		await UserService.updateUserPassword(email, newPassword, oldPassword);
+
+	} catch(error: any) {
 		return error.message;
 	}
 
