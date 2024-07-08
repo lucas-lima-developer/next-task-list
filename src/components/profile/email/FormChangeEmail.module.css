@@ -28,6 +28,11 @@
   color: #F4F4F2;
 }
 
+.errorMessage {
+  font-size: 14px;
+  color: red;
+}
+
 @media (max-width: 650px) {
   .input {
     width: 90%;

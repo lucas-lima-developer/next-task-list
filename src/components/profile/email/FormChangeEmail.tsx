@@ -16,6 +16,12 @@ export default function FormChangeEmail({ email }: FormChangeEmailProps) {
       <input
         className={styles.input}
         type="email"
+        name="oldEmail"
+        placeholder="Email atual..."
+      />
+      <input
+        className={styles.input}
+        type="email"
         name="newEmail"
         placeholder="Novo email..."
       />
@@ -25,6 +31,11 @@ export default function FormChangeEmail({ email }: FormChangeEmailProps) {
           Atualizar
         </button>
       </div>
+      {state != null && (
+        <div className={styles.errorBox}>
+          <p className={styles.errorMessage}>{state}</p>
+        </div>
+      )}
     </form>
   );
 }

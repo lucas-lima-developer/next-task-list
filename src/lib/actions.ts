@@ -151,23 +151,31 @@ export async function updateUserEmailAction(state: any, formData: FormData) {
 	const validatedFields = FormDataUpdateUserEmail.safeParse({
 		email: formData.get("email"),
 		newEmail: formData.get("newEmail"),
+		oldEmail: formData.get("oldEmail")
 	})
+	try {
+		if (!validatedFields.success) {
+			const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
+			throw new Error(messageError);
+		}
 
-	if (!validatedFields.success) {
-		const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
-		throw new Error(messageError);
+		const { email, newEmail, oldEmail } = validatedFields.data;
+
+		if (email != oldEmail) {
+			throw new Error("O email atual está errado.");
+		}
+
+		await UserService.updateUserEmail(email, newEmail);
+
+		const minutes = 15;
+		const expires = new Date(Date.now() + minutes * 60000);
+
+		const token = await AuthService.encryptToken(newEmail);
+
+		cookies().set("token", token, { expires, httpOnly: true })
+	} catch (error: any) {
+		return error.message;
 	}
-
-	const { email, newEmail } = validatedFields.data;
-
-	await UserService.updateUserEmail(email, newEmail);
-
-	const minutes = 15;
-	const expires = new Date(Date.now() + minutes * 60000);
-
-	const token = await AuthService.encryptToken(newEmail);
-
-	cookies().set("token", token, { expires, httpOnly: true })
 
 	revalidatePath('/profile');
 	redirect('/profile');

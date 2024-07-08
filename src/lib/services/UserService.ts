@@ -52,6 +52,10 @@ export default class UserService {
   static async updateUserEmail(email: string, newEmail: string) {
     await DatabaseService.connect();
 
+    const verifyNewEmail = await User.findOne({ email: newEmail });
+
+    if (verifyNewEmail) throw new Error("Já existe um usuário com esse email.");
+
     const user = await UserService.findByEmail(email);
 
     user.email = newEmail;

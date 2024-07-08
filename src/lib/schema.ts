@@ -23,5 +23,6 @@ export const FormDataUpdateTaskSchema = z.object({
 
 export const FormDataUpdateUserEmail = z.object({
   newEmail: z.string().email({ message: 'O email é necessário' }),
-  email: z.string().email()
+  email: z.string().email(),
+  oldEmail: z.string().email()
 });
