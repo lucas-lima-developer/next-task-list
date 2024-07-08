@@ -25,31 +25,11 @@ export default function HeaderLinks() {
           <li>
             <Link
               className={`${styles.link} ${
-                pathname == "/dashboard/perfil" ? styles.underline : ""
+                pathname == "/profile" ? styles.underline : ""
               }`}
-              href={"/dashboard/perfil"}
+              href={"/profile"}
             >
               Perfil
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={`${styles.link} ${
-                pathname == "/dashboard/arquivadas" ? styles.underline : ""
-              }`}
-              href={"/dashboard/arquivadas"}
-            >
-              Tarefas arquivadas
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={`${styles.link} ${
-                pathname == "/dashboard/estatisticas" ? styles.underline : ""
-              }`}
-              href={"estatisticas"}
-            >
-              Estatísticas
             </Link>
           </li>
         </ul>
