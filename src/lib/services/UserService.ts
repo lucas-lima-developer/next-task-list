@@ -1,6 +1,7 @@
 import User from "@/lib/models/User";
 import UserInterface from "@/lib/interfaces/User";
 import DatabaseService from "@/lib/services/DatabaseService";
+import AuthService from "@/lib/services/AuthService";
 
 /**
  * Classe responsável pelos serviços de usuário.
@@ -24,7 +25,7 @@ export default class UserService {
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new Error("Usuário não encontrado");
+      throw new Error(`Usuário com email ${email} não encontrado`);
     }
 
     return user;
@@ -46,5 +47,14 @@ export default class UserService {
     const userCreated = await User.create(user);
 
     return userCreated;
+  }
+
+  static async updateUserEmail(email: string, newEmail: string) {
+    await DatabaseService.connect();
+
+    const user = await UserService.findByEmail(email);
+
+    user.email = newEmail;
+    await user.save();
   }
 }

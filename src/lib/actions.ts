@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import bcrypt from 'bcryptjs';
-import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema, FormDataUpdateTaskSchema } from "@/lib/schema";
+import { FormDataCreateTaskSchema, FormDataLoginSchema, FormDataSignupSchema, FormDataUpdateTaskSchema, FormDataUpdateUserEmail } from "@/lib/schema";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import AuthService from "@/lib/services/AuthService";
@@ -144,5 +144,31 @@ export async function updateTaskAction(state: any, formData: FormData) {
 export async function updateIsCompleteAction(id: string, isComplete: boolean) {
 	await TaskService.updateIsCompleted(id, isComplete);
 
-	revalidatePath('dashboard');
+	revalidatePath('/dashboard');
+}
+
+export async function updateUserEmailAction(state: any, formData: FormData) {
+	const validatedFields = FormDataUpdateUserEmail.safeParse({
+		email: formData.get("email"),
+		newEmail: formData.get("newEmail"),
+	})
+
+	if (!validatedFields.success) {
+		const messageError = HelperService.zodErrorMessageFormat(validatedFields.error.errors);
+		throw new Error(messageError);
+	}
+
+	const { email, newEmail } = validatedFields.data;
+
+	await UserService.updateUserEmail(email, newEmail);
+
+	const minutes = 15;
+	const expires = new Date(Date.now() + minutes * 60000);
+
+	const token = await AuthService.encryptToken(newEmail);
+
+	cookies().set("token", token, { expires, httpOnly: true })
+
+	revalidatePath('/profile');
+	redirect('/profile');
 }

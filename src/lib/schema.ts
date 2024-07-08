@@ -1,3 +1,4 @@
+import email from "next-auth/providers/email";
 import { z } from "zod";
 
 export const FormDataSignupSchema = z.object({
@@ -18,4 +19,9 @@ export const FormDataCreateTaskSchema = z.object({
 export const FormDataUpdateTaskSchema = z.object({
   title: z.string().min(1, { message: 'Nome da tarefa é necessário' }),
   taskId: z.string().min(1, { message: 'Id da tarefa é necessário' })
+});
+
+export const FormDataUpdateUserEmail = z.object({
+  newEmail: z.string().email({ message: 'O email é necessário' }),
+  email: z.string().email()
 });
