@@ -1,30 +1,30 @@
-.container {
-  background-color: antiquewhite;
+.main {
+  background-color: #495464;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
 }
 
-.login-box {
+.form {
   width: 450px;
   background-color: #fff;
   padding: 20px;
-  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
-.login-box h1 {
+.form h1 {
   text-align: center;
-  margin: 30px 0;
+  margin: 30px;
   font-size: 36px;
 }
 
-.login-input {
+.inputBox {
   margin: 20px 0;
 }
 
-.login-input input {
+.inputBox input {
   width: 100%;
   height: 40px;
   padding: 10px;
@@ -33,14 +33,23 @@
   border-radius: 10px;
 }
 
-.login-button {
+.errorBox {
+  margin-top: -15px;
+}
+
+.errorMessage {
+  font-size: 14px;
+  color: red;
+}
+
+.buttonBox {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 30px 0;
 }
 
-.login-button button {
+.buttonBox button {
   width: 80%;
   height: 40px;
   padding: 10px;
@@ -48,20 +57,13 @@
   border-radius: 10px;
 }
 
-.login-button button:hover {
-  background-color: antiquewhite;
+.buttonBox button:hover {
+  background-color: #495464;
+  color: #F4F4F2;
+  cursor: pointer;
 }
 
-.login-box p {
+.form p {
   margin: 30px 0;
   text-align: center;
-}
-
-.login-box .login-error-message {
-  margin-top: -15px;
-}
-
-.login-error-message {
-  font-size: 14px;
-  color: red;
 }

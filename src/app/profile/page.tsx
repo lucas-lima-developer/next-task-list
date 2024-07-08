@@ -1,11 +1,10 @@
+import Profile from "@/components/profile/Profile";
 import AuthService from "@/lib/services/AuthService";
 import TaskService from "@/lib/services/TaskService";
 import UserService from "@/lib/services/UserService";
-import HeaderLinks from "@/components/header/HeaderLinks";
-import FormCreateTask from "@/components/dashboard/FormCreateTask";
-import TaskList from "@/components/dashboard/TaskList";
+import TaskInterface from "@/lib/interfaces/Task";
 
-export default async function Home() {
+export default async function ProfilePage() {
   const email = await AuthService.getEmailFromToken();
   const user = JSON.parse(
     JSON.stringify(await UserService.findByEmail(email!))
@@ -13,13 +12,11 @@ export default async function Home() {
 
   const tasks = JSON.parse(JSON.stringify(await TaskService.getAll(user._id)));
 
+  const tasksCompletedLenght = tasks.filter((tarefa : TaskInterface) => tarefa.isComplete).length;
+
   return (
     <>
-      <main>
-        <FormCreateTask />
-        <TaskList tasks={tasks} />
-      </main>
+      <Profile email={email} allTasks={tasks.length} allCompletedTasks={tasksCompletedLenght}/>
     </>
-
   );
 }

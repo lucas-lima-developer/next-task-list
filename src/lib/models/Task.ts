@@ -1,13 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
-export interface Task extends mongoose.Document {
-  title: string;
-  isComplete: boolean;
-  createdAt: Date;
-  user: mongoose.Types.ObjectId;
-}
-
-export type TaskArray = Task[];
+import Task from "@/lib/interfaces/Task";
 
 const TaskSchema = new mongoose.Schema<Task>({
   title: {
@@ -22,7 +14,7 @@ const TaskSchema = new mongoose.Schema<Task>({
     type: Date,
     default: Date.now,
   },
-  user: {
+  userId: {
     type: Schema.Types.ObjectId, 
     ref: 'User',
     required: true,
